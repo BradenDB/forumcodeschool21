@@ -1,7 +1,7 @@
 const server = require("./server");
 const persist = require("./persist");
 
-const port = process.argv[2] || 8080;
+const port = process.env.PORT || 8080;
 
 persist(() => {
   server.listen(port, () => {
