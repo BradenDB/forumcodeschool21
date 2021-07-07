@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Forum App</title>
+</head>
+<body>
+    <div id="app">
+
+        <h1 class="titlecard">Forum App</h1>
+        <button v-on:click="page = 'forum'">Forum</button>
+        <button v-on:click="page = 'thread'">New Thread</button><br>
+
+        
+        
+        <div v-if="page == 'forum'">
+            <!-- Category Dropdown -->
+            <h3>Select a category</h3>
+            <select v-model="selected_category">
+                <option v-for="category in categories">
+                    {{ category }}
+                </option>
+            </select>
+            {{ selected_category }}
+
+
+            <!-- No threads display -->
+            <div v-show="sorted_threads.length==0">
+                {{ threads_empty }}
+            </div>
+
+
+            <!-- Threads -->
+            <ul>
+                <li v-for="thread in sorted_threads">
+                    <div v-on:click="getPosts(thread._id)">
+                        <h2> {{ thread.name }} </h2>
+                        <p> {{ thread.author }} </p>
+                        <p> {{ thread.description }} </p>
+                        <p> {{ thread.category }} </p>
+
+                    </div>
+                    
+                    <!-- Delete button here-->
+                    <button v-on:click="deleteThread(thread._id)">Delete</button>
+                    <br>
+                </li>
+            </ul>
+        </div>
+        <!-- End of forum -->
+
+        <!-- Posts page -->
+        <div v-else-if="page == 'posts'">
+            <!-- Display the thread you  clicked on-->
+            <h2>{{ postings.name }}</h2>
+            <p>{{ postings.author }}</p>
+            <p>{{ postings.description }}</p>
+            <p>{{ postings.category }}</p>
+
+
+            <h2 class="postTitleCard">Posts</h2>
+            <div v-show="postings.length == 0">
+                {{ posts_empty }}
+            </div>
+            <ul>
+                <li v-for="post in postings.post" class="postli">
+                    <p>{{ post.author }}</p>
+                    <p>{{ post.body }}</p>
+                    <button v-on:click="deletePost(post)">Delete</button>
+                </li>
+            </ul>
+            <!-- Create posts -->
+            <!-- Inputs here -->
+
+
+            <div>
+                <h2>Create Post</h2>
+                <label>Author: </label>
+                <input type="text" v-model="new_post_author"><br>
+                <label>Description: </label>
+                <input type="text" v-model="new_post_body"><br>
+                <button v-on:click="createPost(postings._id)">Submit</button>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- thread page -->
+        <div v-if="page == 'thread'">
+            <!-- Create new thread -->
+            <h2>Create Thread</h2>
+            <label>Enter Title:</label>
+            <input v-model="new_name" type="text">
+            <br>
+            <label>Author:</label>
+            <input v-model="new_author" type="text">
+            <br>
+            <label>Description:</label>
+            <input v-model="new_description" type="text">
+            <br>
+            <label>Category:</label>
+            <select v-model="new_category">
+                <option v-for="category in categories" v-bind:value="category">
+                    {{ category }}
+                </option>
+            </select>
+            <br>
+            <button v-on:click="createThread()">Submit</button>
+        </div>
+        <!-- End of thread creator -->
+
+    </div>
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
